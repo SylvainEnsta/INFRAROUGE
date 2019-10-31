@@ -3,9 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
-def pics_information(img):
-    return img
-
 # QUESTION 1
 img_raw = np.loadtxt("data/row_image.dat")
 print(img_raw.size)
@@ -19,14 +16,14 @@ plt.colorbar()
 # Corps Noir 18°C
 img_temp1 = np.loadtxt("data/temp_bb_18C.dat")
 plt.subplot(332)
-plt.title("Ref : 18C")
+plt.title("T°1 : 18C")
 plt.imshow(img_temp1, vmax=5000)
 plt.colorbar()
 
 # Corps Noir 40°C
 img_temp2 = np.loadtxt("data/temp_bb_40C.dat")
 plt.subplot(333)
-plt.title("Ref: 40C")
+plt.title("T°2: 40C")
 plt.imshow(img_temp1, vmin=5000)
 plt.colorbar()
 
@@ -47,10 +44,28 @@ plt.colorbar()
 # QUESTION 3 - NUC
 img_nuc = alpha * img_raw + beta
 plt.subplot(337)
-plt.title("NUC")
+plt.title("NUC - RAW")
 plt.imshow(img_nuc, vmin=4000, vmax=8000)
 plt.colorbar()
 
+img_temp1_nuc = alpha * img_raw + beta
+plt.subplot(338)
+plt.title("NUC - T°1")
+plt.imshow(img_temp1_nuc, vmin=4000, vmax=8000)
+plt.colorbar()
+
+img_nuc = alpha * img_raw + beta
+plt.subplot(339)
+plt.title("NUC - T°2")
+plt.imshow(img_nuc, vmin=4000, vmax=8000)
+plt.colorbar()
+
+
+
+# QUESTION 4 - ERRORS
+errors = np.where(alpha.all() < 0.75 or alpha.all() > 1.25) or np.where(beta.all() < (-5000) or beta.all() > 5000)
+alpha[errors] = 1
+beta[errors] = 0
 
 
 # IMGSHOW
