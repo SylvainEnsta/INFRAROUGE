@@ -3,12 +3,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def mean_fichier(file_min, file_max, alpha, beta):
+    mean_raw = []
+    mean_nuc = []
     for nbfile in range(file_min, file_max, 2):
         img_raw = np.loadtxt("data/temp_bb_" + nbfile.toString + "C.dat")
-        mean_raw = img_raw.mean()
+        mean_raw.append(img_raw.mean())
 
         img_nuc = alpha * img_raw + beta
-        mean_nuc = img_nuc.mean()
+        mean_nuc.append(img_nuc.mean())
     return mean_raw, mean_nuc
 
 # QUESTION 1
@@ -86,10 +88,6 @@ plt.colorbar()
 
 # QUESTION 6 - PLANCK
 dl, t = [], []
-for nbfile in range(16, 42, 2):
-
-    mean_fichier(file_min, file_max, alpha, beta)
-
 planck = B / np.log(R / (DL - 0) + 1)
 
 # IMGSHOW
