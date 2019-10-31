@@ -108,3 +108,31 @@ plt.legend()
 
 # IMGSHOW
 plt.waitforbuttonpress()
+
+
+# QUESTION 4 - ERRORS
+
+errors = np.where((alpha < 0.75) | (alpha > 1.25) | (beta < -5000) | (beta > 5000))
+print(errors)
+
+alpha[errors] = 1
+beta[errors] = 0
+
+img_nuc[errors] =0
+
+plt.figure()
+plt.title("Affichage des pixels défaillants en noir")
+plt.imshow(img_nuc, vmin=4000, vmax=8000)
+plt.colorbar()
+plt.waitforbuttonpress()
+
+img_nuc[errors] = img_nuc[errors[0]+1, errors[1]]
+
+plt.figure()
+plt.title("Image corrigée")
+plt.imshow(img_nuc, vmin=4000, vmax=8000)
+plt.colorbar()
+# CORRECTION NON FINALISEE
+
+# IMGSHOW
+plt.waitforbuttonpress()
