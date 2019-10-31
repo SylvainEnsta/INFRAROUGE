@@ -1,24 +1,27 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy
+import scipy.optimize
+
 
 def coordinates_planck(file_min, file_max, alpha, beta):
-    moyenne_nuc = []
-    temp = []
+    mean_nuc = []
+    temperature = []
     zeroabsolu = 273.15
 
     for nbfile in range(file_min, file_max, 2):
-        img_raw = np.loadtxt("data/temp_bb_" + nbfile + "C.dat")
+        img_raw = np.loadtxt("data/temp_bb_" + str(nbfile) + "C.dat")
 
         img_nuc = alpha * img_raw + beta
-        moyenne_nuc.append(img_nuc.mean())
-        temp.append(nbfile + zeroabsolu)
+        mean_nuc.append(img_nuc.mean())
+        temperature.append(nbfile + zeroabsolu)
 
-    return moyenne_nuc, temp
+    return mean_nuc, temperature
 
-def planck_equation(DL, R, B, O):
-    return B / np.log(R / (DL - O) + 1)
+
+def planck_equation(mean_nuc, r, b, o):
+    return b / np.log(r / (mean_nuc - o) + 1)
+
 
 # QUESTION 1
 img_raw = np.loadtxt("data/row_image.dat")
@@ -66,17 +69,16 @@ plt.imshow(img_nuc, vmin=4000, vmax=8000)
 plt.colorbar()
 
 # img_temp1_nuc = alpha * img_temp1 + beta
-# plt.subplot(338)
+# plt.subplot(337)
 # plt.title("NUC - T°1")
 # plt.imshow(img_temp1_nuc, vmin=4000, vmax=5000)
 # plt.colorbar()
 #
 # img_temp2_nuc = alpha * img_temp2 + beta
-# plt.subplot(339)
+# plt.subplot(338)
 # plt.title("NUC - T°2")
 # plt.imshow(img_temp2_nuc, vmin=7000,  vmax=8000)
 # plt.colorbar()
-
 
 
 # QUESTION 4 - ERRORS
@@ -95,7 +97,14 @@ plt.colorbar()
 
 # QUESTION 6 - PLANCK
 xdata, ydata = coordinates_planck(16, 42, alpha, beta)
-curve_1, curve_2 = scipy.optimize.curve_fit(planck_equation, xdata, ydata)
+curve_1, curve_2 = scipy.optimize.curve_fit(planck_equation, xdata, ydata, [1e7, 3000, 1000])
+r, b, o = curve_1
+plt.subplot(339)
+# plt.figure(2)
+plt.title("Régle de Conversion Dl → T")
+plt.plot(xdata, ydata, 'o', label="Value Data")
+plt.plot(xdata, planck_equation(xdata, r, b, o), label="Theorical Planck Equation")
+plt.legend()
 
 # IMGSHOW
 plt.waitforbuttonpress()
