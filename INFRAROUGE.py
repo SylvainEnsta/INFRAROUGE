@@ -1,17 +1,24 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy
 
-def mean_fichier(file_min, file_max, alpha, beta):
-    mean_raw = []
-    mean_nuc = []
+def coordinates_planck(file_min, file_max, alpha, beta):
+    moyenne_nuc = []
+    temp = []
+    zeroabsolu = 273.15
+
     for nbfile in range(file_min, file_max, 2):
-        img_raw = np.loadtxt("data/temp_bb_" + nbfile.toString + "C.dat")
-        mean_raw.append(img_raw.mean())
+        img_raw = np.loadtxt("data/temp_bb_" + nbfile + "C.dat")
 
         img_nuc = alpha * img_raw + beta
-        mean_nuc.append(img_nuc.mean())
-    return mean_raw, mean_nuc
+        moyenne_nuc.append(img_nuc.mean())
+        temp.append(nbfile + zeroabsolu)
+
+    return moyenne_nuc, temp
+
+def planck_equation(DL, R, B, O):
+    return B / np.log(R / (DL - O) + 1)
 
 # QUESTION 1
 img_raw = np.loadtxt("data/row_image.dat")
@@ -87,8 +94,8 @@ plt.imshow(img_nuc_correction, vmin=4000, vmax=8000)
 plt.colorbar()
 
 # QUESTION 6 - PLANCK
-dl, t = [], []
-planck = B / np.log(R / (DL - 0) + 1)
+xdata, ydata = coordinates_planck(16, 42, alpha, beta)
+curve_1, curve_2 = scipy.optimize.curve_fit(planck_equation, xdata, ydata)
 
 # IMGSHOW
 plt.waitforbuttonpress()
