@@ -1,7 +1,15 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.optimize import curve_fit
+
+def mean_fichier(file_min, file_max, alpha, beta):
+    for nbfile in range(file_min, file_max, 2):
+        img_raw = np.loadtxt("data/temp_bb_" + nbfile.toString + "C.dat")
+        mean_raw = img_raw.mean()
+
+        img_nuc = alpha * img_raw + beta
+        mean_nuc = img_nuc.mean()
+    return mean_raw, mean_nuc
 
 # QUESTION 1
 img_raw = np.loadtxt("data/row_image.dat")
@@ -69,14 +77,20 @@ print(errors)
 alpha[errors] = 1
 beta[errors] = 0
 
-# CORRECTION NON FINALISEE
+# QUESTION 5 - CORRECTION NON FINALISEE
 img_nuc_correction = cv2.blur(img_nuc, (6, 6))
 plt.subplot(338)
 plt.title("CORRECTION")
 plt.imshow(img_nuc_correction, vmin=4000, vmax=8000)
 plt.colorbar()
 
+# QUESTION 6 - PLANCK
+dl, t = [], []
+for nbfile in range(16, 42, 2):
 
+    mean_fichier(file_min, file_max, alpha, beta)
+
+planck = B / np.log(R / (DL - 0) + 1)
 
 # IMGSHOW
 plt.waitforbuttonpress()
