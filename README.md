@@ -1,5 +1,5 @@
 # INFRAROUGE
 RAW Pics
 
-![](IMG/FINAL.png)
-![](IMG/PLANCK.png)
+![](img/FINAL.png)
+![](img/PLANCK.png)
