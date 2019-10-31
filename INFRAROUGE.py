@@ -12,6 +12,12 @@ plt.figure(1)
 plt.imshow(img, vmin=4000, vmax=8000)
 plt.colorbar()
 
+temp1 = np.loadtxt("data/temp_bb_18C.dat")
+temp2 = np.loadtxt("data/temp_bb_40C.dat")
+alpha = (temp2.mean() - temp1.mean()) / (temp2-temp1)
+beta = temp1.mean() - (alpha*temp1)
+
+
 
 # IMGSHOW
 plt.waitforbuttonpress()
